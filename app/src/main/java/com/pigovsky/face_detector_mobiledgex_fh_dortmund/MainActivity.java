@@ -11,6 +11,8 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -41,6 +43,10 @@ public class MainActivity extends AppCompatActivity {
     private ImageView mProcessedImageView;
     private ExecutorService mCameraExecutor;
 
+    private Client client = new Client(null);
+
+    private TextView errorMessageTextView;
+
     private Boolean needToRotatePhoto = true;
 
     @Override
@@ -60,6 +66,34 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(
                     this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS);
         }
+
+        SeekBar frameRatioSeekBar = findViewById(R.id.frameRatioSeekBar);
+        frameRatioSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (fromUser) {
+                    // double selectedRatioValue = ratioValues.get(progress);
+                    // Log.d("FrameRatio", "Selected ratio value: " + selectedRatioValue);
+                    // TODO: Apply the selected frame ratio
+                    client.setRequestInterval(progress);
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                // Optional
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                // Optional
+                // int finalProgress = seekBar.getProgress();
+                // String finalSelectedRatioString = availableRatios.get(finalProgress);
+                // Toast.makeText(FrameRatioActivity.this, "Final Ratio: " + finalSelectedRatioString, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        errorMessageTextView = findViewById(R.id.errorMessageTextView);
     }
 
     private void startCamera() {
@@ -100,9 +134,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private class ImageProcessor implements ImageAnalysis.Analyzer {
-
-        Client client = new Client(null);
-
         @Override
         public void analyze(@NonNull ImageProxy image) {
             // Convert the ImageProxy to a Bitmap
@@ -118,7 +149,12 @@ public class MainActivity extends AppCompatActivity {
                 photo.highlightFace(client.getFace());
 
                 // Display the processed bitmap in the ImageView
-                runOnUiThread(() -> mProcessedImageView.setImageBitmap(photo.getBitmap()));
+                runOnUiThread(
+                    () -> {
+                        mProcessedImageView.setImageBitmap(photo.getBitmap());
+                        errorMessageTextView.setText(client.getErrorMessage());
+                    }
+                );
             }
             // VERY IMPORTANT: Close the image to let the next one be processed
             image.close();

@@ -6,5 +6,5 @@ public class DefaultConfiguration {
     public static final int serverPort = 9998;
 
     public static final boolean mock = false;
-    public static long requestInterval = 5000;
+    public static long requestInterval = 3000;
 }

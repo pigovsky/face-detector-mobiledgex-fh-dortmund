@@ -15,20 +15,19 @@
         android:orientation="vertical"
         android:padding="8dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Live Camera Preview"
-            android:textStyle="bold"
-            android:textSize="16sp"
-            android:layout_marginBottom="4dp"/>
-
         <androidx.camera.view.PreviewView
             android:id="@+id/viewFinder"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </LinearLayout>
 
+    <SeekBar
+        android:id="@+id/frameRatioSeekBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="5000"
+        android:progress="3000"
+    />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -36,14 +35,6 @@
         android:layout_weight="1"
         android:orientation="vertical"
         android:padding="8dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Processed Frame (Grayscale)"
-            android:textStyle="bold"
-            android:textSize="16sp"
-            android:layout_marginBottom="4dp"/>
 
         <ImageView
             android:id="@+id/processedImageView"
@@ -53,5 +44,14 @@
             android:contentDescription="Processed camera frame"
             android:scaleType="fitCenter"/>
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/errorMessageTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@{errorMessage}"
+        android:textStyle="bold"
+        android:textSize="12sp"
+    />
 
 </LinearLayout>
