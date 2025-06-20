@@ -12,9 +12,9 @@ import com.pigovsky.face_detector_mobiledgex_fh_dortmund.photo.*;
 public class Client {
     private long lastRequestTime = 0;
 
-    private final String serverHost;
+    private String serverHost;
 
-    private final int serverPort;
+    private int serverPort;
 
     private Face face;
 
@@ -22,12 +22,12 @@ public class Client {
 
     private String errorMessage;
 
-    public Client(String serverUrl) {
-        if (serverUrl != null) {
+    public void setServerUrl(String serverUrl) {
+        try {
             String[] hostPort = serverUrl.split(":");
             serverHost = hostPort[0];
             serverPort = Integer.parseInt(hostPort[1]);
-        } else {
+        } catch (Throwable t) {
             serverHost = DefaultConfiguration.serverHost;
             serverPort = DefaultConfiguration.serverPort;
         }

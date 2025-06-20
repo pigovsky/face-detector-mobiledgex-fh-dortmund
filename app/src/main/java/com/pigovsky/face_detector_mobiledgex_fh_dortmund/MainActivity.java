@@ -9,7 +9,10 @@ import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -28,6 +31,7 @@ import androidx.core.content.ContextCompat;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import com.pigovsky.face_detector_mobiledgex_fh_dortmund.client.Client;
+import com.pigovsky.face_detector_mobiledgex_fh_dortmund.common.DefaultConfiguration;
 import com.pigovsky.face_detector_mobiledgex_fh_dortmund.photo.Photo;
 
 import java.nio.ByteBuffer;
@@ -43,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageView mProcessedImageView;
     private ExecutorService mCameraExecutor;
 
-    private Client client = new Client(null);
+    private Client client = new Client();
 
     private TextView errorMessageTextView;
 
@@ -54,6 +58,25 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        EditText serverUrlEditText = findViewById(R.id.serverUrlEditText);
+        serverUrlEditText.setText(DefaultConfiguration.serverHost + ":" + DefaultConfiguration.serverPort);
+        client.setServerUrl(null);
+        serverUrlEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                client.setServerUrl(editable.toString());
+            }
+        });
         mPreviewView = findViewById(R.id.viewFinder);
         mProcessedImageView = findViewById(R.id.processedImageView);
 
