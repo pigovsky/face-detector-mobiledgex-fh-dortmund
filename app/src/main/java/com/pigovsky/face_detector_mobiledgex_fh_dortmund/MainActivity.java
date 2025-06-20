@@ -42,14 +42,14 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "CameraProcessingApp";
     private static final int REQUEST_CODE_PERMISSIONS = 10;
     private static final String[] REQUIRED_PERMISSIONS = new String[]{Manifest.permission.CAMERA};
-
-    private PreviewView mPreviewView;
     private ImageView mProcessedImageView;
     private ExecutorService mCameraExecutor;
 
     private Client client = new Client();
 
     private TextView errorMessageTextView;
+
+    private TextView latencyTextView;
 
     private Boolean needToRotatePhoto = true;
 
@@ -77,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
                 client.setServerUrl(editable.toString());
             }
         });
-        mPreviewView = findViewById(R.id.viewFinder);
         mProcessedImageView = findViewById(R.id.processedImageView);
 
         mCameraExecutor = Executors.newSingleThreadExecutor();
@@ -117,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         errorMessageTextView = findViewById(R.id.errorMessageTextView);
+        latencyTextView = findViewById(R.id.latencyTextView);
     }
 
     private void startCamera() {
@@ -130,7 +130,6 @@ public class MainActivity extends AppCompatActivity {
 
                 // Preview Use Case
                 Preview preview = new Preview.Builder().build();
-                preview.setSurfaceProvider(mPreviewView.getSurfaceProvider());
 
                 // ImageAnalysis Use Case
                 ImageAnalysis imageAnalysis = new ImageAnalysis.Builder()
@@ -176,6 +175,7 @@ public class MainActivity extends AppCompatActivity {
                     () -> {
                         mProcessedImageView.setImageBitmap(photo.getBitmap());
                         errorMessageTextView.setText(client.getErrorMessage());
+                        latencyTextView.setText(String.valueOf(client.getE2eLatency()));
                     }
                 );
             }

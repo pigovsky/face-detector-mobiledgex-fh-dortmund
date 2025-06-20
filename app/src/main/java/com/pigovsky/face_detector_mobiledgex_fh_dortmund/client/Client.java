@@ -22,6 +22,12 @@ public class Client {
 
     private String errorMessage;
 
+    private long e2eLatency;
+
+    public long getE2eLatency() {
+        return e2eLatency;
+    }
+
     public void setServerUrl(String serverUrl) {
         try {
             String[] hostPort = serverUrl.split(":");
@@ -52,12 +58,13 @@ public class Client {
         lastRequestTime = System.currentTimeMillis();
         new Thread(() -> {
             try {
+                long startTime = System.currentTimeMillis();
                 Connection clientToServerConnection = SocketConnection.clientConnection(serverHost, serverPort);
                 FaceDetector faceDetector = new NetworkFaceDetector(clientToServerConnection);
                 face = faceDetector.detect(photo);
                 clientToServerConnection.close();
-                System.out.println(face);
                 errorMessage = null;
+                e2eLatency = System.currentTimeMillis() - startTime;
             } catch (ConnectionError e) {
                 errorMessage = e.getMessage();
             }

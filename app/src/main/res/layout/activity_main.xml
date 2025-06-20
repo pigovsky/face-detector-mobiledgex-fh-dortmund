@@ -8,18 +8,10 @@
     android:weightSum="2"
     tools:context=".MainActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        android:padding="8dp">
-
-        <androidx.camera.view.PreviewView
-            android:id="@+id/viewFinder"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </LinearLayout>
+    <TextView android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delay between requests"
+    />
 
     <SeekBar
         android:id="@+id/frameRatioSeekBar"
@@ -35,6 +27,26 @@
         android:id="@+id/serverUrlEditText"
         android:text="172.22.229.133:9998"
         />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="1">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="e2e-latency: "
+            />
+        <TextView
+            android:id="@+id/latencyTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            />
+    </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
